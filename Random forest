@@ -1,0 +1,21 @@
+setwd("E:/Leeds/Dissertation/8.3 random forest/")
+df <- read.csv(file = "2regions.csv")
+
+library(randomForest)
+
+accuracy = 0
+for (iteration in 1:100){
+    valid_data = df[1:2400,]
+    train_data = df[2401:dim(df)[1],]
+    
+    Forest = randomForest(label~area1+area2, data=train_data, ntree =500)
+    prediction = predict(Forest, newdata=valid_data, type="response")
+    mat <- table(valid_data$label,prediction,dnn = c("Actual","Prediction"))
+    mat
+    acc <- mat[1,1]+mat[2,2]+mat[3,3]+mat[4,4]
+    accuracy <- accuracy + acc
+  }
+
+accuracy_overall <- accuracy/2400
+print(accuracy_overall)
+mat
